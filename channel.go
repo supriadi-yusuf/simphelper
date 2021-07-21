@@ -7,19 +7,36 @@ import (
 )
 
 // MergeChanels is function to merge several receiver channels into one receiver channel.
-func MergeChanels(chanels ...interface{}) (chn interface{}, err error) {
+func MergeChanels(channels ...interface{}) (chn interface{}, err error) {
 
 	defer GetErrorOnPanic(&err)
 
-	totChan := len(chanels) //total channel element that we want to join
+	totChan := len(channels) //total channel element that we want to join
 	if totChan == 0 {
 		return nil, errors.New("number of joined channel may not be zero")
 	}
 
-	refVal0 := reflect.ValueOf(chanels[0])
+	var refVal0 reflect.Value
+	var elType0 reflect.Type
 
-	if refVal0.Kind() != reflect.Chan {
-		return nil, errors.New("input parameter must be channel")
+	for i, channel := range channels {
+		refVal := reflect.ValueOf(channel)
+		if i == 0 {
+			refVal0 = refVal
+		}
+
+		if refVal.Kind() != reflect.Chan {
+			return nil, errors.New("input parameter must be channel")
+		}
+
+		elType := refVal.Type().Elem()
+		if i == 0 {
+			elType0 = elType
+		}
+
+		if elType != elType0 {
+			return nil, errors.New("channel's type is different")
+		}
 	}
 
 	elType := refVal0.Type().Elem()                      //type of channel
@@ -33,9 +50,16 @@ func MergeChanels(chanels ...interface{}) (chn interface{}, err error) {
 	wg := new(sync.WaitGroup)
 	wg.Add(totChan)
 
-	for _, chanel := range chanels {
+	for _, chanel := range channels {
 
 		go func(ch reflect.Value) {
+
+			defer func() {
+				//fmt.Println("selesai - START")
+				wg.Done()
+				recover()
+				//fmt.Println("selesai - DONE")
+			}()
 
 			for {
 
@@ -49,7 +73,6 @@ func MergeChanels(chanels ...interface{}) (chn interface{}, err error) {
 
 			}
 
-			wg.Done()
 		}(reflect.ValueOf(chanel))
 
 	}
