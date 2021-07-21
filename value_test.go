@@ -1,31 +1,80 @@
 package simphelper
 
 import (
-	"errors"
 	"reflect"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
 
-func (v *myValue) IsInx(collection interface{}) (result bool, err error) {
+func Test_IsIn_String(t *testing.T) {
+	var i int = 10
 
-	defer GetErrorOnPanic(&err)
+	newValue := NewValue(i)
+	_, err := newValue.IsIn("test is in")
+	assert.NotNil(t, err, "it should be error")
+}
 
-	collectionType := reflect.TypeOf(collection)
-	if collectionType.Kind() != reflect.Array && collectionType.Kind() != reflect.Slice && collectionType.Kind() != reflect.Map {
-		return false, errors.New("collection must be array, slice or map")
-	}
+func Test_IsIn_BoolSlice(t *testing.T) {
+	var i int = 10
 
-	if collectionType.Elem() != reflect.TypeOf(v.data) {
-		return false, errors.New("type is different")
-	}
+	newValue := NewValue(i)
+	_, err := newValue.IsIn([]bool{false, true, true, false})
+	assert.NotNil(t, err, "it should be error")
+}
 
-	if collectionType.Kind() == reflect.Map {
-		return v.isInMap(collection), nil
-	}
+func Test_IsIn_EmptyIntMap(t *testing.T) {
+	var i int = 10
 
-	return v.isInSlcOrArray(collection), nil
+	newValue := NewValue(i)
+	result, err := newValue.IsIn(map[string]int{})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, false, "it should be false")
+}
+
+func Test_IsIn_NotExistInIntMap(t *testing.T) {
+	var i int = 10
+
+	newValue := NewValue(i)
+	result, err := newValue.IsIn(map[string]int{"satu": 1, "dua": 2, "tiga": 3})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, false, "it should be false")
+}
+
+func Test_IsIn_ExistInIntMap(t *testing.T) {
+	var i int = 10
+
+	newValue := NewValue(i)
+	result, err := newValue.IsIn(map[string]int{"1": 1, "2": 2, "3": 3, "10": 10})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, true, "it should be true")
+}
+
+func Test_IsIn_EmptyIntSlice(t *testing.T) {
+	var i int = 10
+
+	newValue := NewValue(i)
+	result, err := newValue.IsIn([]int{})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, false, "it should be false")
+}
+
+func Test_IsIn_NotExistInIntSlice(t *testing.T) {
+	var i int = 10
+
+	newValue := NewValue(i)
+	result, err := newValue.IsIn([]int{1, 2, 3})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, false, "it should be false")
+}
+
+func Test_IsIn_ExistInIntSlice(t *testing.T) {
+	var i int = 10
+
+	newValue := NewValue(i)
+	result, err := newValue.IsIn([]int{1, 2, 3, 10, 11})
+	assert.Nil(t, err, "it should be not error")
+	assert.Equal(t, result, true, "it should be true")
 }
 
 func Test_IsNumber_int(t *testing.T) {
