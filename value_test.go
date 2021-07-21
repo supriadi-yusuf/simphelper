@@ -28,34 +28,121 @@ func (v *myValue) IsInx(collection interface{}) (result bool, err error) {
 	return v.isInSlcOrArray(collection), nil
 }
 
-func (v *myValue) IsNumberx() (result bool) {
+func Test_IsNumber_int(t *testing.T) {
+	var i int = 10
 
-	valType := reflect.TypeOf(v.data)
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
 
-	switch valType.Name() {
-	case "int", "int8", "int16", "int32", "int64", "uint", "uint8", "uint16", "uint32", "uint64", "float32", "float64":
-		return true
-	default:
-		return false
-	}
-
+	assert.Equal(t, isNumber, true, "it should be true")
 }
 
-func (v *myValue) ToFloatx() (result float64, err error) {
+func Test_IsNumber_int8(t *testing.T) {
+	var i int8 = 10
 
-	defer GetErrorOnPanic(&err)
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
 
-	elmVal := reflect.ValueOf(v.data)
+	assert.Equal(t, isNumber, true, "it should be true")
+}
 
-	switch elmVal.Type().Name() {
-	case "int", "int8", "int16", "int32", "int64":
-		return float64(elmVal.Int()), nil
-	case "uint", "uint8", "uint16", "uint32", "uint64":
-		return float64(elmVal.Uint()), nil
-	default:
-		return elmVal.Float(), nil
-	}
+func Test_IsNumber_int16(t *testing.T) {
+	var i int16 = 10
 
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_int32(t *testing.T) {
+	var i int32 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_int64(t *testing.T) {
+	var i int64 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_uint(t *testing.T) {
+	var i uint = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_uint8(t *testing.T) {
+	var i uint8 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_uint16(t *testing.T) {
+	var i uint16 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_uint32(t *testing.T) {
+	var i uint32 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_uint64(t *testing.T) {
+	var i uint64 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_float32(t *testing.T) {
+	var i float32 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_float64(t *testing.T) {
+	var i float64 = 10
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, true, "it should be true")
+}
+
+func Test_IsNumber_string(t *testing.T) {
+	var i string = "10"
+
+	newValue := NewValue(i)
+	isNumber := newValue.IsNumber()
+
+	assert.Equal(t, isNumber, false, "it should be false")
 }
 
 func Test_ToFloat_int8(t *testing.T) {
