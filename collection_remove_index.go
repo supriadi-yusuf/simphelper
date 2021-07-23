@@ -40,3 +40,20 @@ func (c *myCollection) removeIndexInSliceOfArray(index int) (result interface{},
 
 	return newSlice.Interface(), nil
 }
+
+func (c *myCollection) RemoveIndex(index interface{}) (result interface{}, err error) {
+
+	defer GetErrorOnPanic(&err)
+
+	collectionType := reflect.TypeOf(c.data)
+	if collectionType.Kind() != reflect.Array && collectionType.Kind() != reflect.Slice &&
+		collectionType.Kind() != reflect.Map {
+		panic("collection must be array, slice or map")
+	}
+
+	if collectionType.Kind() == reflect.Map {
+		return c.removeIndexInMap(index)
+	}
+
+	return c.removeIndexInSliceOfArray(index.(int))
+}

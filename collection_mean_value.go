@@ -40,3 +40,21 @@ func (c *myCollection) meanValueFromSliceOfArray() (result float64, err error) {
 
 	return total / float64(currSlice.Len()), nil
 }
+
+//Mean is count average of data in collection
+func (c *myCollection) MeanValue() (result float64, err error) {
+
+	defer GetErrorOnPanic(&err)
+
+	collectionType := reflect.TypeOf(c.data)
+	if collectionType.Kind() != reflect.Array && collectionType.Kind() != reflect.Slice &&
+		collectionType.Kind() != reflect.Map {
+		panic("collection must be array, slice or map")
+	}
+
+	if collectionType.Kind() == reflect.Map {
+		return c.meanValueFromMap()
+	}
+
+	return c.meanValueFromSliceOfArray()
+}

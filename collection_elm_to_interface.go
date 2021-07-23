@@ -33,3 +33,21 @@ func (c *myCollection) convElmToInterfaceOnSliceOrArray() (result interface{}, e
 
 	return newSliceVal.Interface(), nil
 }
+
+func (c *myCollection) ConvElmToInterface() (result interface{}, err error) {
+
+	defer GetErrorOnPanic(&err)
+
+	//check type of collection's data
+	collectionType := reflect.TypeOf(c.data)
+	if collectionType.Kind() != reflect.Array && collectionType.Kind() != reflect.Slice &&
+		collectionType.Kind() != reflect.Map {
+		panic("collection must be array, slice or map")
+	}
+
+	if collectionType.Kind() == reflect.Map {
+		return c.convElmToInterfaceOnMap()
+	}
+
+	return c.convElmToInterfaceOnSliceOrArray()
+}
