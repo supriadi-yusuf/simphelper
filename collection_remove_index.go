@@ -51,6 +51,12 @@ func (c *myCollection) RemoveIndex(index interface{}) (result interface{}, err e
 		panic("collection must be array, slice or map")
 	}
 
+	indexType := reflect.TypeOf(index)
+	if indexType.Kind() == reflect.Array || indexType.Kind() == reflect.Slice ||
+		indexType.Kind() == reflect.Map || indexType.Kind() == reflect.Struct {
+		panic("index must be not array, slice, map or struct")
+	}
+
 	if collectionType.Kind() == reflect.Map {
 		return c.removeIndexInMap(index)
 	}
