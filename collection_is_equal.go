@@ -10,8 +10,12 @@ func (c *myCollection) isEqualInMap(data interface{}) (result bool, err error) {
 
 	iter := reflect.ValueOf(c.data).MapRange()
 	for iter.Next() {
+		mapVal := paramValue.MapIndex(iter.Key())
 
-		if iter.Value().Interface() != paramValue.MapIndex(iter.Key()).Interface() {
+		if !mapVal.IsValid() {
+			return false, nil
+		}
+		if iter.Value().Interface() != mapVal.Interface() {
 			return false, nil
 		}
 	}

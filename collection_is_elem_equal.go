@@ -9,11 +9,21 @@ func (c *myCollection) isElemEqualInMap(data interface{}) (result bool, err erro
 	return c.isEqualInMap(data)
 }
 
-func (c *myCollection) findIn(value reflect.Value, collection reflect.Value) (res bool) {
+func (c *myCollection) findIn(value reflect.Value, collection reflect.Value,
+	start int, swapperFunc func(int, int)) (res bool) {
 
 	interfaceVal := value.Interface()
-	for i := 0; i < collection.Len(); i++ {
+	for i := start; i < collection.Len(); i++ {
 		if interfaceVal == collection.Index(i).Interface() {
+			// do swapping
+			if i != start {
+				//startValue := collection.Index(start)
+				//iValue := collection.Index(i)
+				//collection.Index(i).Set(startValue)
+				//collection.Index(start).Set(iValue)
+				swapperFunc(start, i)
+			}
+
 			return true
 		}
 
@@ -22,19 +32,28 @@ func (c *myCollection) findIn(value reflect.Value, collection reflect.Value) (re
 	return false
 }
 
-func (c *myCollection) isElemEqualInSliceOfArray(data interface{}) (result bool, err error) {
+func (c *myCollection) isElemEqualInSliceOfArray(param interface{}) (result bool, err error) {
 
-	paramValue := reflect.ValueOf(data)
+	paramValue := reflect.ValueOf(param)
 	dataValue := reflect.ValueOf(c.data)
-	for i := 0; i < dataValue.Len(); i++ {
 
-		if !c.findIn(paramValue.Index(i), dataValue) {
+	dataType := reflect.TypeOf(c.data)
+	dataLen := dataValue.Len()
+	duplicateCollection := reflect.MakeSlice(dataType, dataLen, dataLen)
+	reflect.Copy(duplicateCollection, dataValue)
+
+	swapperFunc := reflect.Swapper(duplicateCollection.Interface())
+
+	paramLen := paramValue.Len()
+	for i := 0; i < paramLen; i++ {
+
+		if !c.findIn(paramValue.Index(i), duplicateCollection, i, swapperFunc) {
 			return false, nil
 		}
 
-		if !c.findIn(dataValue.Index(i), paramValue) {
-			return false, nil
-		}
+		//if !c.findIn(dataValue.Index(i), paramValue) {
+		//return false, nil
+		//}
 	}
 
 	return true, nil
@@ -71,10 +90,12 @@ func (c *myCollection) IsElemEqual(data interface{}) (result bool, err error) {
 		return c.isElemEqualInStruct(data)
 	}
 
-	collectionValue := reflect.ValueOf(c.data)
-	paramValue := reflect.ValueOf(data)
-	if collectionValue.Len() != paramValue.Len() {
-		return false, nil
+	if !func() bool {
+		collectionValue := reflect.ValueOf(c.data)
+		paramValue := reflect.ValueOf(data)
+		return collectionValue.Len() == paramValue.Len()
+	}() {
+		return false, nil //errors.New("size is different")
 	}
 
 	if collectionType.Kind() == reflect.Map {
