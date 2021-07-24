@@ -112,3 +112,71 @@ func Test_Collection_IsEqual_StructIsSame(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, true, result)
 }
+
+func Test_Collection_IsEqual_SliceWithDifferentLength(t *testing.T) {
+
+	result, err := NewCollection([]int{1, 2, 3}).IsEqual([]int{1, 2, 3, 4})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_SliceWithDifferentContent(t *testing.T) {
+
+	result, err := NewCollection([]int{1, 2, 3}).IsEqual([]int{1, 2, 4})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_SliceWithSameContent(t *testing.T) {
+
+	result, err := NewCollection([]int{1, 2, 3}).IsEqual([]int{1, 2, 3})
+	assert.Nil(t, err)
+	assert.Equal(t, true, result)
+}
+
+func Test_Collection_IsEqual_SliceWithSameContentButDifferentSequence(t *testing.T) {
+
+	result, err := NewCollection([]int{1, 2, 3}).IsEqual([]int{1, 3, 2})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_MapWithDifferentLength(t *testing.T) {
+
+	result, err := NewCollection(map[string]int{"1": 1, "2": 2, "3": 3}).
+		IsEqual(map[string]int{"1": 1, "2": 2, "3": 3, "4": 4})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_MapWithDifferentIndex(t *testing.T) {
+
+	result, err := NewCollection(map[string]int{"1": 1, "2": 2, "3": 3}).
+		IsEqual(map[string]int{"1": 1, "2": 2, "4": 4})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_MapWithDifferentContent(t *testing.T) {
+
+	result, err := NewCollection(map[string]int{"1": 1, "2": 2, "3": 3}).
+		IsEqual(map[string]int{"1": 1, "2": 2, "3": 4})
+	assert.Nil(t, err)
+	assert.Equal(t, false, result)
+}
+
+func Test_Collection_IsEqual_MapWithSameContent(t *testing.T) {
+
+	result, err := NewCollection(map[string]int{"1": 1, "2": 2, "3": 3}).
+		IsEqual(map[string]int{"1": 1, "2": 2, "3": 3})
+	assert.Nil(t, err)
+	assert.Equal(t, true, result)
+}
+
+func Test_Collection_IsEqual_MapWithSameContentButDifferentSequence(t *testing.T) {
+
+	result, err := NewCollection(map[string]int{"1": 1, "2": 2, "3": 3}).
+		IsEqual(map[string]int{"1": 1, "3": 3, "2": 2})
+	assert.Nil(t, err)
+	assert.Equal(t, true, result)
+}
