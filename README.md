@@ -7,7 +7,7 @@ simhelper stands for simple helper. It is a package containing simple function, 
 
 # Installation 
 
-We can get this package with command :
+We can download this package with command :
 
 ```bash
 go get -u github.com/supriadi-yusuf/simphelper
