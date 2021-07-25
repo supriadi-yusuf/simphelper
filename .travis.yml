@@ -7,6 +7,6 @@ go_import_path: github.com/supriadi-yusuf/simphelper
 install:
   - go mod tidy
 script:
-  - go test -cover -v ./...
+  - go test -race -cover -v ./...
 after_success:
   - bash <(curl -s https://codecov.io/bash)
