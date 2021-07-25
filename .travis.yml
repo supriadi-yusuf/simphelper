@@ -7,6 +7,9 @@ go_import_path: github.com/supriadi-yusuf/simphelper
 install:
   - go mod tidy
 script:
-  - go test -race -cover -v ./...
+  - go test -race -coverprofile=coverage.txt -covermode=atomic
 after_success:
+  - export CODECOV_TOKEN='7e7dd96c-809c-4f6f-bcd6-16c31953c54c'
+  - pip install --user codecov
+  - codecov --file coverage/lcov.info --disable search
   - bash <(curl -s https://codecov.io/bash)
