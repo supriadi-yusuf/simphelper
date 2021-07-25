@@ -1,0 +1,10 @@
+language: go
+os:
+  - linux
+go:
+  - go1.15
+go_import_path: github.com/supriadi-yusuf/simphelper
+install:
+  - go mod tidy
+script:
+  - go test -cover -v ./...
