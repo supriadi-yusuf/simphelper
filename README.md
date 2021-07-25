@@ -4,6 +4,7 @@ simhelper stands for simple helper. It is a package containing simple function, 
 
 [![Go Reference](https://pkg.go.dev/badge/github.com/supriadi-yusuf/simphelper.svg)](https://pkg.go.dev/github.com/supriadi-yusuf/simphelper)
 [![Build Status](https://api.travis-ci.com/supriadi-yusuf/simphelper.svg?branch=main&status=passed)](https://travis-ci.com/github/supriadi-yusuf/simphelper)
+[![codecov](https://codecov.io/gh/supriadi-yusuf/simphelper/branch/main/graph/badge.svg?token=CGBFDZJC87)](https://codecov.io/gh/supriadi-yusuf/simphelper)
 
 # Installation 
 
